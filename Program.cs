@@ -4,6 +4,7 @@ using chessAPI;
 using chessAPI.business.interfaces;
 using chessAPI.models.game;
 using chessAPI.models.player;
+using chessAPI.models.team;
 using Microsoft.AspNetCore.Authorization;
 using Serilog;
 using Serilog.Events;
@@ -48,23 +49,19 @@ try
     //PLAYER
 
     //GET PLAYER BY ID
-    app.MapGet("player/{idPlayer}",
-    [AllowAnonymous] async(IPlayerBusiness<int> bs, int idPlayer) => Results.Ok(await bs.getPlayer(idPlayer)));
+    app.MapGet("player/{idPlayer}", [AllowAnonymous] async(IPlayerBusiness<int> bs, int idPlayer) => Results.Ok(await bs.getPlayer(idPlayer)));
 
     // CREATE PLAYER
-    app.MapPost("player", 
-    [AllowAnonymous] async(IPlayerBusiness<int> bs, clsNewPlayer newPlayer) => Results.Ok(await bs.addPlayer(newPlayer)));
+    app.MapPost("player", [AllowAnonymous] async(IPlayerBusiness<int> bs, clsNewPlayer newPlayer) => Results.Ok(await bs.addPlayer(newPlayer)));
 
     //UPDATE PLAYER
-    app.MapPut("player/{idPlayer}",
-    [AllowAnonymous] async (IPlayerBusiness<int> bs, int idPlayer, clsPlayer<int> updatePlayer) => Results.Ok(await bs.updatePlayer(updatePlayer)));
+    app.MapPut("player/{idPlayer}",[AllowAnonymous] async (IPlayerBusiness<int> bs, int idPlayer, clsPlayer<int> updatePlayer) => Results.Ok(await bs.updatePlayer(updatePlayer)));
 
 
     //GAME
 
     //GET GAME BY ID
-    app.MapGet("game/{idGame}",
-    [AllowAnonymous] async (IGameBusiness<int> bs, int idGame) => {
+    app.MapGet("game/{idGame}",[AllowAnonymous] async (IGameBusiness<int> bs, int idGame) => {
         
         if (await bs.getGame(idGame) != null) {
             return Results.Ok(await bs.getGame(idGame));
@@ -73,17 +70,23 @@ try
         return Results.NotFound("No existe ningún juego con el id: " + idGame);   
     });
 
-
     //CREATE GAME
-    app.MapPost("game", 
-    [AllowAnonymous] async (IGameBusiness<int> bs, clsNewGame newGame) => Results.Ok(await bs.addGame(newGame)));
+    app.MapPost("game", [AllowAnonymous] async (IGameBusiness<int> bs, clsNewGame newGame) => Results.Ok(await bs.addGame(newGame)));
 
     //UPDATE GAME
-    app.MapPut("game/{idGame}",
-    [AllowAnonymous] async (IGameBusiness<int> bs, int idGame, clsGame<int> updateGame) => 
-            Results.Ok(await bs.updateGame(updateGame)));
+    app.MapPut("game/{idGame}",[AllowAnonymous] async (IGameBusiness<int> bs, int idGame, clsGame<int> updateGame) => Results.Ok(await bs.updateGame(updateGame)));
 
 
+    //TEAM
+
+    //GET TEAM BY ID
+    app.MapGet("team/{idTeam}", [AllowAnonymous] async (ITeamBusiness<int> bs, int idTeam) => Results.Ok(await bs.getTeam(idTeam)));
+
+    //CREATE TEAM
+    app.MapPost("team", [AllowAnonymous] async (ITeamBusiness<int> bs, clsNewTeam newTeam) => Results.Ok(await bs.addTeam(newTeam)));
+
+    //UPDATE TEAM
+    app.MapPut("team/{idTeam}", [AllowAnonymous] async (ITeamBusiness<int> bs, int idTeam, clsTeam<int> updateTeam) => Results.Ok(await bs.updateTeam(updateTeam)));
 
     app.Run();
 }
