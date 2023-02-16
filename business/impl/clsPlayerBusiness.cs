@@ -4,7 +4,7 @@ using chessAPI.models.player;
 
 namespace chessAPI.business.impl;
 
-public sealed class clsPlayerBusiness<TI, TC> : IPlayerBusiness<TI> 
+public sealed class clsPlayerBusiness<TI, TC> : IPlayerBusiness<TI>
     where TI : struct, IEquatable<TI>
     where TC : struct
 {
@@ -19,5 +19,17 @@ public sealed class clsPlayerBusiness<TI, TC> : IPlayerBusiness<TI>
     {
         var x = await playerRepository.addPlayer(newPlayer).ConfigureAwait(false);
         return new clsPlayer<TI>(x, newPlayer.email);
+    }
+
+    public async Task<clsPlayer<TI>> getPlayer(TI playerId)
+    {
+        var x = await playerRepository.getPlayer(playerId).ConfigureAwait(false);
+        return new clsPlayer<TI>(x.id, x.email);
+    }
+
+    public async Task<clsPlayer<TI>> updatePlayer(clsPlayer<TI> updatedPlayer)
+    {
+        await playerRepository.updatePlayer(updatedPlayer).ConfigureAwait(false);
+        return updatedPlayer;
     }
 }
